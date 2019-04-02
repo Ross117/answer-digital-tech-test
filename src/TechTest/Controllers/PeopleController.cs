@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using TechTest.Repositories;
 using TechTest.Repositories.Models;
@@ -26,7 +27,14 @@ namespace TechTest.Controllers
             // people returned from PeopleRepository then an empty
             // JSON array should be returned.
 
-            throw new NotImplementedException();
+            var people = this.PersonRepository.GetAll();
+       
+            if (people.Count() == 0) {
+              return this.Ok(new object[0]);
+            }
+            else {
+              return this.Ok(people);
+            }
         }
 
         [HttpGet("{id}")]
@@ -39,7 +47,14 @@ namespace TechTest.Controllers
             // If null is returned from the PeopleRepository with
             // the supplied id then a NotFound should be returned.
 
-            throw new NotImplementedException();
+            var person = this.PersonRepository.Get(id);
+
+            if (person == null) {
+              return this.NotFound();
+            }
+            else {
+              return this.Ok(person);
+            }   
         }
 
         [HttpPut("{id}")]
@@ -53,8 +68,22 @@ namespace TechTest.Controllers
             // updated, the person should be returned from the endpoint.
             // If null is returned from the PeopleRepository then a
             // NotFound should be returned.
+            var person = this.PersonRepository.Get(id);
 
-            throw new NotImplementedException();
+            person.Authorised = personUpdate.Authorised;
+            person.Enabled = personUpdate.Enabled;
+            person.Colours = personUpdate.Colours;
+
+            var updatedPerson = this.PersonRepository.Update(person);
+
+            if (updatedPerson == null) {
+              Console.Write("Update returned null value");
+              return this.NotFound();
+            }
+            else {
+              Console.Write("Update returned non-null value");
+              return this.Ok(updatedPerson);
+            }   
         }
     }
 }
