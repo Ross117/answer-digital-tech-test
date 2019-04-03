@@ -13,9 +13,10 @@ export class ColourNamesValueConverter {
     //
     // Example: 'Blue, Green, Red'
 
-    console.log(colours);
-
     const colourString: string = colours
+      .map( (val: IColour) => {
+        return val.name;
+      })
       .sort()
       .join(", ");
 
