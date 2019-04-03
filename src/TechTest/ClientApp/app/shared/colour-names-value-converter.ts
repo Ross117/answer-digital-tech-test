@@ -13,7 +13,13 @@ export class ColourNamesValueConverter {
     //
     // Example: 'Blue, Green, Red'
 
-    return 'Todo';
+    console.log(colours);
+
+    const colourString: string = colours
+      .sort()
+      .join(", ");
+
+    return colourString;
   }
 
 }
