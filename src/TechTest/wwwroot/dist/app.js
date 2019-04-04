@@ -18283,7 +18283,22 @@ let PersonEdit = class PersonEdit {
         // Send a JSON request to the API with the newly updated
         // this.person object. If the response is successful then
         // the user should be navigated to the list page.
-        this.router.navigate('people');
+        const updatedPerson = {
+            Authorised: this.person.authorised,
+            Enabled: this.person.enabled,
+            Colours: this.person.colours
+        };
+        const update = await this.http.fetch(`/people/${this.person.id}`, {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(updatedPerson)
+        });
+        if (update.ok) {
+            this.router.navigate('people');
+        }
     }
     cancel() {
         this.router.navigate('people');

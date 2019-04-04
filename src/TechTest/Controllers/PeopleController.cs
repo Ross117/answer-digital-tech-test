@@ -58,7 +58,7 @@ namespace TechTest.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(int id, PersonUpdate personUpdate)
+        public IActionResult Update(int id, [FromBody]PersonUpdate personUpdate)
         {
             // TODO: Step 3
             //
@@ -70,6 +70,10 @@ namespace TechTest.Controllers
             // NotFound should be returned.
             var person = this.PersonRepository.Get(id);
 
+            if (person == null) {
+              return this.NotFound();
+            }
+
             person.Authorised = personUpdate.Authorised;
             person.Enabled = personUpdate.Enabled;
             person.Colours = personUpdate.Colours;
@@ -77,11 +81,9 @@ namespace TechTest.Controllers
             var updatedPerson = this.PersonRepository.Update(person);
 
             if (updatedPerson == null) {
-              Console.Write("Update returned null value");
               return this.NotFound();
             }
             else {
-              Console.Write("Update returned non-null value");
               return this.Ok(updatedPerson);
             }   
         }
